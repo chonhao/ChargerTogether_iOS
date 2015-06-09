@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
 
-@interface ViewController : UIViewController{
-	CLLocationManager *locationManager;
+@interface ViewController : UIViewController <MKMapViewDelegate> {
+	IBOutlet MKMapView *_mapView;
+	MKPointAnnotation *_myPin;
+	UIView *_menuView;
 }
 
+- (void)handleNotification:(NSNotification *)notification;
 
 @end
-
