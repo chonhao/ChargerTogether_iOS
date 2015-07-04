@@ -14,6 +14,9 @@
 	IBOutlet MKMapView *_mapView;
 	MKPointAnnotation *_myPin;
 	UIView *_menuView;
+	
+	int _menuViewLimitationMax;
+	int _menuViewLimitationMin;
 }
 
 - (void)handleNotification:(NSNotification *)notification;
