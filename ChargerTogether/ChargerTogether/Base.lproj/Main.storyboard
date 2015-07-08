@@ -35,17 +35,15 @@
                                 <variation key="widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="16" y="66" width="759" height="514"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="66" width="800" height="514"/>
-                                </variation>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R9g-Se-pG0" secondAttribute="bottom" id="7Cz-rb-KNX"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R9g-Se-pG0" secondAttribute="bottom" id="7L2-kA-cu1"/>
+                            <constraint firstAttribute="bottom" secondItem="R9g-Se-pG0" secondAttribute="bottom" id="DMP-K4-KaW"/>
                             <constraint firstAttribute="trailingMargin" secondItem="R9g-Se-pG0" secondAttribute="trailing" id="FY4-4X-riU"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="top" secondItem="K9Z-6L-NiM" secondAttribute="bottom" constant="8" id="Q5r-9l-MNZ"/>
+                            <constraint firstItem="K9Z-6L-NiM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="QMk-QF-u9A"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="top" secondItem="K9Z-6L-NiM" secondAttribute="bottom" constant="8" id="Siz-r9-BRE"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R9g-Se-pG0" secondAttribute="bottom" id="atN-mm-vBs"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="bDy-qD-ZgS"/>
@@ -56,7 +54,9 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="QMk-QF-u9A"/>
                                 <exclude reference="dXV-TU-pKE"/>
+                                <exclude reference="DMP-K4-KaW"/>
                                 <exclude reference="FY4-4X-riU"/>
                                 <exclude reference="Q5r-9l-MNZ"/>
                                 <exclude reference="Siz-r9-BRE"/>
@@ -64,14 +64,15 @@
                                 <exclude reference="bcQ-aX-ALd"/>
                                 <exclude reference="sw6-aR-hgC"/>
                                 <exclude reference="uz3-V3-XUZ"/>
-                                <exclude reference="7Cz-rb-KNX"/>
                                 <exclude reference="7L2-kA-cu1"/>
                                 <exclude reference="atN-mm-vBs"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="constraints">
+                                <include reference="QMk-QF-u9A"/>
                                 <include reference="dXV-TU-pKE"/>
+                                <include reference="DMP-K4-KaW"/>
                                 <exclude reference="FY4-4X-riU"/>
                                 <exclude reference="Q5r-9l-MNZ"/>
                                 <exclude reference="Siz-r9-BRE"/>
@@ -79,7 +80,6 @@
                                 <include reference="bcQ-aX-ALd"/>
                                 <include reference="sw6-aR-hgC"/>
                                 <include reference="uz3-V3-XUZ"/>
-                                <include reference="7Cz-rb-KNX"/>
                                 <exclude reference="7L2-kA-cu1"/>
                                 <exclude reference="atN-mm-vBs"/>
                             </mask>

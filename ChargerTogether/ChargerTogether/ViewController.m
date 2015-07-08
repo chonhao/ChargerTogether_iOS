@@ -10,6 +10,7 @@
 #import "AppManager.h"
 
 #define MENU_WIDTH (1024/3)
+#define MENU_MIN_WIDTH 50
 
 @interface ViewController ()
 
@@ -48,41 +49,46 @@
 	[_menuView setBackgroundColor:[UIColor whiteColor]];
 	[self.view addSubview:_menuView];
 
-	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))  {
-		[self setPortraitMenu];
-	}
-	else  {
-		[self setLandscapeMenu];
-	}
+	if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))  { [self setPortraitMenu]; }
+	else  { [self setLandscapeMenu]; }
 	
 	_menuView.layer.shadowColor = [UIColor lightGrayColor].CGColor;
 	_menuView.layer.shadowOffset = CGSizeMake(-5, 0);
 	_menuView.layer.shadowRadius = 2.0f;
 	_menuView.layer.shadowOpacity = 0.5f;
 
+	// Swipe Motion Recognizer
 	UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
 	[recognizer setMaximumNumberOfTouches:1];
 	[recognizer setDelegate:self];
 	[_menuView addGestureRecognizer:recognizer];
 	
-	UISwitch *batterySwitch = [[UISwitch alloc]initWithFrame:CGRectMake(10,20, 100, 100)];
+	UILabel *menuLabel = [[UILabel alloc] initWithFrame:CGRectMake(-130, self.view.frame.size.height/2, 300, 30)];
+	[menuLabel setText:@"Swipe left for Preferences"];
+	menuLabel.transform=CGAffineTransformMakeRotation((90*M_PI)/180);
+	[_menuView addSubview:menuLabel];
+	
+	//-------------------Switches-----------------------------------------------
+	int UIx = 50; int UIy = 60;
+	
+	UISwitch *batterySwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx,UIy, 100, 100)];
 	[batterySwitch setTag:1];
 	[batterySwitch addTarget:self action:@selector(toggleBatterySwitch:) forControlEvents:UIControlEventTouchUpInside];
 	[_menuView addSubview:batterySwitch];
 
-	UILabel *batteryText = [[UILabel alloc] initWithFrame:CGRectMake(70, 20, 100, 30)];
+	UILabel *batteryText = [[UILabel alloc] initWithFrame:CGRectMake(UIx+60, UIy, 100, 30)];
 	batteryText.text = @"Battery";
 	[_menuView addSubview:batteryText];
 	
-	UISwitch *cableSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(10+150,20, 100, 100)];
+	UISwitch *cableSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx+150, UIy, 100, 100)];
 	[cableSwitch setTag:2];
 	[cableSwitch addTarget:self action:@selector(toggleBatterySwitch:) forControlEvents:UIControlEventTouchUpInside];
 	[_menuView addSubview:cableSwitch];
 	
-	UILabel *cableText = [[UILabel alloc] initWithFrame:CGRectMake(70+150, 20, 100, 30)];
+	UILabel *cableText = [[UILabel alloc] initWithFrame:CGRectMake(UIx+210, UIy, 100, 30)];
 	cableText.text = @"Cable";
 	[_menuView addSubview:cableText];
-
+	//-------------------Switches ended--------------------------------------------
 }
 
 - (void)didReceiveMemoryWarning {
@@ -175,7 +181,7 @@
 	NSArray *array = [resultPin.title componentsSeparatedByString:@" "];
 	int index = [[array objectAtIndex:0] intValue];
 	NSDictionary *dictionary = [[AppManager sharedManager] getDictFromIndex:index];
-	NSLog(@"%@", [dictionary objectForKey:@"name"]);
+	NSLog(@"%@", [dictionary objectForKey:@"no"]);
 	// TODO: not yet finish here...
 }
 
@@ -221,23 +227,24 @@
 			[[AppManager sharedManager] updateCableFilter:switchObject.isOn];
 		}  break;
 	}
+	[[AppManager sharedManager] updateGPS];
 }
 
 - (void)setLandscapeMenu  {
 	int height = self.view.frame.size.height;
-	int width = MENU_WIDTH;
+	int width = MENU_WIDTH*10;
 	int y = 0;
-	int x = self.view.frame.size.height-100;
-	_menuViewLimitationMax = self.view.frame.size.height-100;
+	int x = self.view.frame.size.height-MENU_MIN_WIDTH;
+	_menuViewLimitationMax = self.view.frame.size.height-MENU_MIN_WIDTH;
 	_menuViewLimitationMin = self.view.frame.size.height-MENU_WIDTH;
 	[_menuView setFrame:CGRectMake(x, y, width, height)];
 }
 
 - (void)setPortraitMenu  {
 	int height = self.view.frame.size.height;
-	int width = MENU_WIDTH;
+	int width = MENU_WIDTH*10;
 	int y = 0;
-	int x = self.view.frame.size.width-100;
+	int x = self.view.frame.size.width-MENU_MIN_WIDTH;
 	_menuViewLimitationMax = x;
 	_menuViewLimitationMin = self.view.frame.size.width-MENU_WIDTH;
 	[_menuView setFrame:CGRectMake(x, y, width, height)];
