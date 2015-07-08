@@ -89,10 +89,25 @@
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
 }
-- (IBAction)btnClicked:(id)sender {
+- (IBAction)btnClicked:(UIButton*)sender {
 	[[AppManager sharedManager] printGPS];
+//	[_mapView setVisibleMapRect:MKMapRectMake(256, 192, 512, 384) animated:YES];
 	
-	[_mapView setVisibleMapRect:MKMapRectMake(256, 192, 512, 384) animated:YES];
+	if (_menuView.frame.origin.x != _menuViewLimitationMin) {
+		[UIView animateWithDuration:0.25f animations:^{
+			CGRect rect = _menuView.frame;
+			rect.origin.x =_menuViewLimitationMin;
+			_menuView.frame = rect;
+		}];
+	}else{
+		[UIView animateWithDuration:0.25f animations:^{
+			CGRect rect = _menuView.frame;
+			rect.origin.x =_menuViewLimitationMax;
+			_menuView.frame = rect;
+		}];
+	}
+
+	
 }
 
 - (void)handleNotification:(NSNotification *)notification  {
@@ -165,12 +180,30 @@
 }
 
 - (void)pan:(UIPanGestureRecognizer *)recognizer  {
-	CGPoint location = [recognizer locationInView:self.view];
-	if (recognizer.state != UIGestureRecognizerStateEnded)  {
+	CGPoint location = [recognizer velocityInView:self.view];
+	CGPoint fingerLocation = [recognizer locationInView:self.view];
+	if(recognizer.state == UIGestureRecognizerStateBegan){
+		differences = _menuView.frame.origin.x-fingerLocation.x;
+		NSLog(@"data %f %f %f",differences,_menuView.frame.origin.x,fingerLocation.x);
+	}
+	if(recognizer.state == UIGestureRecognizerStateChanged){
+		[_menuView setFrame:CGRectMake(fingerLocation.x+differences, 0, _menuView.frame.size.width, _menuView.frame.size.height)];
+	}
+	if (recognizer.state == UIGestureRecognizerStateEnded)  {
 		int x = location.x;
-		if (x < _menuViewLimitationMin)  {x = _menuViewLimitationMin;}
-		if (x > _menuViewLimitationMax) {x = _menuViewLimitationMax;}
-		[_menuView setFrame:CGRectMake(x, 0, _menuView.frame.size.width, _menuView.frame.size.height)];
+		if (x<0) {
+				[UIView animateWithDuration:0.25f animations:^{
+				CGRect rect = _menuView.frame;
+				rect.origin.x =_menuViewLimitationMin;
+				_menuView.frame = rect;
+			}];
+		}else if(x>0){
+				[UIView animateWithDuration:0.25f animations:^{
+				CGRect rect = _menuView.frame;
+				rect.origin.x =_menuViewLimitationMax;
+				_menuView.frame = rect;
+			}];
+		}
 	}
 }
 

@@ -17,6 +17,8 @@
 	
 	int _menuViewLimitationMax;
 	int _menuViewLimitationMin;
+	
+	CGFloat differences;
 }
 
 - (void)handleNotification:(NSNotification *)notification;

@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9Z-6L-NiM">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9Z-6L-NiM">
                                 <rect key="frame" x="16" y="28" width="46" height="30"/>
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -27,7 +27,7 @@
                                     <action selector="btnClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lvs-iU-OwO"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="R9g-Se-pG0">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="R9g-Se-pG0">
                                 <rect key="frame" x="16" y="66" width="476" height="324"/>
                                 <variation key="heightClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="16" y="66" width="568" height="410"/>
@@ -35,7 +35,7 @@
                                 <variation key="widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="16" y="66" width="759" height="514"/>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" ambiguous="YES" misplaced="YES">
+                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
                                     <rect key="frame" x="0.0" y="66" width="800" height="514"/>
                                 </variation>
                             </mapView>
@@ -50,11 +50,13 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R9g-Se-pG0" secondAttribute="bottom" id="atN-mm-vBs"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="bDy-qD-ZgS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="R9g-Se-pG0" secondAttribute="trailing" constant="-16" id="bcQ-aX-ALd"/>
+                            <constraint firstItem="K9Z-6L-NiM" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="28" id="dXV-TU-pKE"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="sw6-aR-hgC"/>
                             <constraint firstItem="R9g-Se-pG0" firstAttribute="top" secondItem="K9Z-6L-NiM" secondAttribute="bottom" constant="8" id="uz3-V3-XUZ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="dXV-TU-pKE"/>
                                 <exclude reference="FY4-4X-riU"/>
                                 <exclude reference="Q5r-9l-MNZ"/>
                                 <exclude reference="Siz-r9-BRE"/>
@@ -69,6 +71,7 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="constraints">
+                                <include reference="dXV-TU-pKE"/>
                                 <exclude reference="FY4-4X-riU"/>
                                 <exclude reference="Q5r-9l-MNZ"/>
                                 <exclude reference="Siz-r9-BRE"/>
