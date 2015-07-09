@@ -15,12 +15,17 @@
 	MKPointAnnotation *_myPin;
 	UIView *_menuView;
 	
+	UIButton *menuLabel;
+	
 	int _menuViewLimitationMax;
 	int _menuViewLimitationMin;
 	
 	CGFloat differences;
+	
+	UILabel *statusIndicator;
 }
 
 - (void)handleNotification:(NSNotification *)notification;
+- (void)toggleMenuView;
 
 @end

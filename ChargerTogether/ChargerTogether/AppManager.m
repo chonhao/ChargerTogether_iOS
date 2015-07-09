@@ -31,19 +31,28 @@ static AppManager *_sharedManager = nil;
 }
 
 -(void)updateGPS{
-	int filterValue = 0;
+	filterValue = 0;
 	if (_battery == YES)  {filterValue |= 1;}
 	if (_cable == YES)  {filterValue |= 2;}
-	NSString *filterString = [NSString stringWithFormat:@"%d", filterValue];
-	NSLog(@"filterString: %@", filterString);
+	if(_mode == NO){
+		// borrow mode
+		filterString = [NSString stringWithFormat:@"%d", filterValue];
+		poviderItemString = @"0";
+		NSLog(@"filterString: %@ poviderItem: %@", filterString, poviderItemString);
+	}else{
+		// share mode
+		filterString = @"0";
+		poviderItemString = [NSString stringWithFormat:@"%d,", filterValue];
+		NSLog(@"filterString: %@ poviderItem: %@", filterString, poviderItemString);
+	}
 
 	NSString *urlString = @"http://home.puiching.edu.mo/ChargerTogether/NeedHelp2.php";
 	NSDictionary *dictionary = @{
 								 @"no": @"86",
-								 @"GPSx": [NSString stringWithFormat:@"%.2f", _locationManager.location.coordinate.latitude],
-								 @"GPSy": [NSString stringWithFormat:@"%.2f", _locationManager.location.coordinate.longitude],
+								 @"GPSx": [NSString stringWithFormat:@"%.6f", _locationManager.location.coordinate.latitude],
+								 @"GPSy": [NSString stringWithFormat:@"%.6f", _locationManager.location.coordinate.longitude],
 								 @"filter": filterString,
-								 @"providerItem": @"0",
+								 @"providerItem": poviderItemString,
 								 @"distance":@"0.01",
 								 };
 	
@@ -88,6 +97,10 @@ static AppManager *_sharedManager = nil;
 
 - (void)updateCableFilter:(BOOL)enabled  {
 	_cable = enabled;
+}
+
+- (void)updateMode:(BOOL)enabled {
+	_mode = enabled;
 }
 
 - (NSDictionary *)getDictFromIndex:(int)index  {

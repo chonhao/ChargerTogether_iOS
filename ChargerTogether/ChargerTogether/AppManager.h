@@ -17,7 +17,12 @@
 	
 	BOOL _battery;
 	BOOL _cable;
+	BOOL _mode;
 	NSArray *_array;
+	
+	NSString *filterString;
+	NSString *poviderItemString;
+	NSInteger filterValue;
 }
 
 + (AppManager *)sharedManager;
@@ -29,6 +34,7 @@
 
 - (void)updateBatteryFilter:(BOOL)enabled;
 - (void)updateCableFilter:(BOOL)enabled;
+- (void)updateMode:(BOOL)enabled;
 
 - (NSDictionary *)getDictFromIndex:(int)index;
 

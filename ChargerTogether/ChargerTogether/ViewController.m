@@ -11,6 +11,7 @@
 
 #define MENU_WIDTH (1024/3)
 #define MENU_MIN_WIDTH 50
+#define ANIMATION_SPEED 0.25f
 
 @interface ViewController ()
 
@@ -63,27 +64,51 @@
 	[recognizer setDelegate:self];
 	[_menuView addGestureRecognizer:recognizer];
 	
-	UILabel *menuLabel = [[UILabel alloc] initWithFrame:CGRectMake(-130, self.view.frame.size.height/2, 300, 30)];
-	[menuLabel setText:@"Swipe left for Preferences"];
+	menuLabel = [[UIButton alloc] initWithFrame:CGRectMake(-130, self.view.frame.size.height/2, 300, 30)];
+	[menuLabel setTitle:@"Swipe left for preference" forState:UIControlStateNormal];
+	menuLabel.backgroundColor = [UIColor whiteColor];
+	[menuLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+	[menuLabel addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+	[menuLabel setTag:10];
 	menuLabel.transform=CGAffineTransformMakeRotation((90*M_PI)/180);
 	[_menuView addSubview:menuLabel];
 	
 	//-------------------Switches-----------------------------------------------
-	int UIx = 50; int UIy = 60;
+	int UIx = 50; int UIy = 160;
 	
-	UISwitch *batterySwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx,UIy, 100, 100)];
+	UILabel *shareLabel = [[UILabel alloc] initWithFrame:CGRectMake(UIx+180, UIy-80, 100, 30)];
+	[shareLabel setText:@"Share"];
+	[_menuView addSubview:shareLabel];
+	
+	UILabel *borrowLabel = [[UILabel alloc] initWithFrame:CGRectMake(UIx+25, UIy-80, 100, 30)];
+	[borrowLabel setText:@"Borrow"];
+	[_menuView addSubview:borrowLabel];
+	
+	UISwitch *modeSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(UIx+100, UIy-80, 100, 150)];
+	[modeSwitch setTag:3];
+	[modeSwitch addTarget:self action:@selector(toggleBatterySwitch:) forControlEvents:UIControlEventTouchUpInside];
+	[_menuView addSubview:modeSwitch];
+	[modeSwitch setOnTintColor:[UIColor lightGrayColor]];
+	
+	statusIndicator = [[UILabel alloc] initWithFrame:CGRectMake(UIx, UIy-30, 200, 30)];
+	[statusIndicator setText:@"I want to borrow:"];
+	[_menuView addSubview:statusIndicator];
+	
+	UISwitch *batterySwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx,UIy, 100, 150)];
 	[batterySwitch setTag:1];
 	[batterySwitch addTarget:self action:@selector(toggleBatterySwitch:) forControlEvents:UIControlEventTouchUpInside];
 	[_menuView addSubview:batterySwitch];
+	[batterySwitch setOnTintColor:[UIColor brownColor]];
 
 	UILabel *batteryText = [[UILabel alloc] initWithFrame:CGRectMake(UIx+60, UIy, 100, 30)];
 	batteryText.text = @"Battery";
 	[_menuView addSubview:batteryText];
 	
-	UISwitch *cableSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx+150, UIy, 100, 100)];
+	UISwitch *cableSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(UIx+150, UIy, 100, 150)];
 	[cableSwitch setTag:2];
 	[cableSwitch addTarget:self action:@selector(toggleBatterySwitch:) forControlEvents:UIControlEventTouchUpInside];
 	[_menuView addSubview:cableSwitch];
+	[cableSwitch setOnTintColor:[UIColor brownColor]];
 	
 	UILabel *cableText = [[UILabel alloc] initWithFrame:CGRectMake(UIx+210, UIy, 100, 30)];
 	cableText.text = @"Cable";
@@ -98,22 +123,36 @@
 - (IBAction)btnClicked:(UIButton*)sender {
 	[[AppManager sharedManager] printGPS];
 //	[_mapView setVisibleMapRect:MKMapRectMake(256, 192, 512, 384) animated:YES];
+	switch (sender.tag) {
+			case 10:
+					{
+						[self toggleMenuView];
+					}
+					break;
+			
+			default:{
+						[self toggleMenuView];
+					}
+					break;
+	}
+
 	
+}
+
+- (void)toggleMenuView{
 	if (_menuView.frame.origin.x != _menuViewLimitationMin) {
-		[UIView animateWithDuration:0.25f animations:^{
+		[UIView animateWithDuration:ANIMATION_SPEED animations:^{
 			CGRect rect = _menuView.frame;
 			rect.origin.x =_menuViewLimitationMin;
 			_menuView.frame = rect;
 		}];
 	}else{
-		[UIView animateWithDuration:0.25f animations:^{
+		[UIView animateWithDuration:ANIMATION_SPEED animations:^{
 			CGRect rect = _menuView.frame;
 			rect.origin.x =_menuViewLimitationMax;
 			_menuView.frame = rect;
 		}];
 	}
-
-	
 }
 
 - (void)handleNotification:(NSNotification *)notification  {
@@ -198,13 +237,13 @@
 	if (recognizer.state == UIGestureRecognizerStateEnded)  {
 		int x = location.x;
 		if (x<0) {
-				[UIView animateWithDuration:0.25f animations:^{
+				[UIView animateWithDuration:ANIMATION_SPEED animations:^{
 				CGRect rect = _menuView.frame;
 				rect.origin.x =_menuViewLimitationMin;
 				_menuView.frame = rect;
 			}];
 		}else if(x>0){
-				[UIView animateWithDuration:0.25f animations:^{
+				[UIView animateWithDuration:ANIMATION_SPEED animations:^{
 				CGRect rect = _menuView.frame;
 				rect.origin.x =_menuViewLimitationMax;
 				_menuView.frame = rect;
@@ -216,6 +255,16 @@
 - (void)toggleBatterySwitch:(UISwitch *)switchObject  {
 	switch (switchObject.tag)  {
 		default:  break;
+			
+		case 3:	{
+			// Mode
+			[[AppManager sharedManager] updateMode:switchObject.isOn];
+			if(switchObject.isOn){
+				[statusIndicator setText:@"I want to share:"];
+			}else{
+				[statusIndicator setText:@"I want to borrow:"];
+			}
+		} break;
 
 		case 1:  {
 			//  Battery
@@ -238,6 +287,7 @@
 	_menuViewLimitationMax = self.view.frame.size.height-MENU_MIN_WIDTH;
 	_menuViewLimitationMin = self.view.frame.size.height-MENU_WIDTH;
 	[_menuView setFrame:CGRectMake(x, y, width, height)];
+//	[menuLabel setCenter:CGPointMake(-130, self.view.frame.size.height/2)];
 }
 
 - (void)setPortraitMenu  {
@@ -248,6 +298,7 @@
 	_menuViewLimitationMax = x;
 	_menuViewLimitationMin = self.view.frame.size.width-MENU_WIDTH;
 	[_menuView setFrame:CGRectMake(x, y, width, height)];
+//	[menuLabel setCenter:CGPointMake(-130, self.view.frame.size.height/2)];
 }
 
 @end
